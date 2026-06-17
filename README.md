@@ -1,13 +1,12 @@
-[meeting-tracker index.html.html](https://github.com/user-attachments/files/29025197/meeting-tracker.index.html.html)
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Meeting & Call Tracker</title>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -39,7 +38,7 @@
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
+<script type="text/babel" data-presets="react">
 const { useState, useEffect } = React;
 
 const MEETING_TYPES = ["Account Management","Follow-up","AM Intro","RMS Set Up","RMS Discussions","Upsell","Other"];
@@ -164,7 +163,7 @@ function WeeklyView({ data=[] }) {
                 <td style={td("var(--success-text)")}>{w.ms.totalComp}</td>
                 <td style={td("var(--info-text)")}>{w.ms.showRateTotal}</td>
                 <td style={td("var(--info-text)")}>{w.ms.points}</td>
-                <td style={td("var(--warn-text)")}>{w.ms.upsells + w.standaloneUpsellPts}</td>
+                <td style={td("var(--warn-text)")}>{w.ms.upsells+w.standaloneUpsellPts}</td>
                 <td style={td()}>{w.cs.total}</td>
                 <td style={td("var(--success-text)")}>{w.cs.connected}</td>
                 <td style={td("var(--info-text)")}>{w.cs.connectRate}</td>
@@ -248,54 +247,54 @@ function App() {
   useEffect(()=>{ try{localStorage.setItem("call_data",JSON.stringify(calls));}catch{} },[calls]);
   useEffect(()=>{ try{localStorage.setItem("upsell_data",JSON.stringify(upsells));}catch{} },[upsells]);
 
-  const dayMtgs   = meetings.filter(m=>m.date===selectedDate);
-  const dayCalls  = calls.filter(c=>c.date===selectedDate);
-  const dayUpsells= upsells.filter(u=>u.date===selectedDate);
+  const dayMtgs=meetings.filter(m=>m.date===selectedDate);
+  const dayCalls=calls.filter(c=>c.date===selectedDate);
+  const dayUpsells=upsells.filter(u=>u.date===selectedDate);
 
   function saveMtg() {
     if (!mtgForm.contact||!mtgForm.status) return;
-    if (editMtgId) { setMeetings(p=>p.map(m=>m.id===editMtgId?{...mtgForm,date:selectedDate,id:editMtgId}:m)); setEditMtgId(null); }
+    if (editMtgId){setMeetings(p=>p.map(m=>m.id===editMtgId?{...mtgForm,date:selectedDate,id:editMtgId}:m));setEditMtgId(null);}
     else setMeetings(p=>[...p,{...mtgForm,date:selectedDate,id:Date.now()}]);
-    setMtgForm(EMPTY_MTG); setShowMtgForm(false);
+    setMtgForm(EMPTY_MTG);setShowMtgForm(false);
   }
   function saveCall() {
     if (!callForm.contact||!callForm.status) return;
-    if (editCallId) { setCalls(p=>p.map(c=>c.id===editCallId?{...callForm,date:selectedDate,id:editCallId}:c)); setEditCallId(null); }
+    if (editCallId){setCalls(p=>p.map(c=>c.id===editCallId?{...callForm,date:selectedDate,id:editCallId}:c));setEditCallId(null);}
     else setCalls(p=>[...p,{...callForm,date:selectedDate,id:Date.now()}]);
-    setCallForm(EMPTY_CALL); setShowCallForm(false);
+    setCallForm(EMPTY_CALL);setShowCallForm(false);
   }
   function saveUpsell() {
     if (!upsellForm.contact||!upsellForm.upsellType) return;
-    if (editUpsellId) { setUpsells(p=>p.map(u=>u.id===editUpsellId?{...upsellForm,date:selectedDate,id:editUpsellId}:u)); setEditUpsellId(null); }
+    if (editUpsellId){setUpsells(p=>p.map(u=>u.id===editUpsellId?{...upsellForm,date:selectedDate,id:editUpsellId}:u));setEditUpsellId(null);}
     else setUpsells(p=>[...p,{...upsellForm,date:selectedDate,id:Date.now()}]);
-    setUpsellForm(EMPTY_UPSELL); setShowUpsellForm(false);
+    setUpsellForm(EMPTY_UPSELL);setShowUpsellForm(false);
   }
-  function startEditMtg(m) { setMtgForm({contact:m.contact,type:m.type,format:m.format,status:m.status,outcome:m.outcome,upsell:m.upsell||false,upsellType:m.upsellType||""}); setEditMtgId(m.id); setShowMtgForm(true); setShowCallForm(false); setShowUpsellForm(false); }
-  function startEditCall(c) { setCallForm({contact:c.contact,status:c.status,notes:c.notes}); setEditCallId(c.id); setShowCallForm(true); setShowMtgForm(false); setShowUpsellForm(false); }
-  function startEditUpsell(u) { setUpsellForm({contact:u.contact,upsellType:u.upsellType,notes:u.notes}); setEditUpsellId(u.id); setShowUpsellForm(true); setShowMtgForm(false); setShowCallForm(false); }
+  function startEditMtg(m){setMtgForm({contact:m.contact,type:m.type,format:m.format,status:m.status,outcome:m.outcome,upsell:m.upsell||false,upsellType:m.upsellType||""});setEditMtgId(m.id);setShowMtgForm(true);setShowCallForm(false);setShowUpsellForm(false);}
+  function startEditCall(c){setCallForm({contact:c.contact,status:c.status,notes:c.notes});setEditCallId(c.id);setShowCallForm(true);setShowMtgForm(false);setShowUpsellForm(false);}
+  function startEditUpsell(u){setUpsellForm({contact:u.contact,upsellType:u.upsellType,notes:u.notes});setEditUpsellId(u.id);setShowUpsellForm(true);setShowMtgForm(false);setShowCallForm(false);}
 
   function parseICS(text) {
     const events=[];
     const blocks=text.split("BEGIN:VEVENT");
     blocks.slice(1).forEach(block=>{
-      const get=key=>{ const m=block.match(new RegExp(key+"[^:]*:([^\\r\\n]+)")); return m?m[1].trim():""; };
-      const dtRaw=get("DTSTART"); if(!dtRaw) return;
+      const get=key=>{const m=block.match(new RegExp(key+"[^:]*:([^\\r\\n]+)"));return m?m[1].trim():"";};
+      const dtRaw=get("DTSTART");if(!dtRaw)return;
       const dateStr=dtRaw.replace(/T\d+Z?$/,"").replace(/(\d{4})(\d{2})(\d{2})/,"$1-$2-$3");
       const summary=get("SUMMARY").replace(/\\,/g,",").replace(/\\n/g," ");
       const desc=get("DESCRIPTION").replace(/\\,/g,",").replace(/\\n/g," ");
       const location=get("LOCATION");
       const format=location&&!location.toLowerCase().includes("http")&&!location.toLowerCase().includes("zoom")&&!location.toLowerCase().includes("meet")&&!location.toLowerCase().includes("teams")?"In Person":"Online";
-      const typeGuess=(()=>{ const s=(summary+" "+desc).toLowerCase();
-        if(s.includes("intro")) return "AM Intro"; if(s.includes("upsell")) return "Upsell";
-        if(s.includes("rms set")) return "RMS Set Up"; if(s.includes("rms")) return "RMS Discussions";
-        if(s.includes("follow")||s.includes("f/u")) return "Follow-up"; return "Account Management";
+      const typeGuess=(()=>{const s=(summary+" "+desc).toLowerCase();
+        if(s.includes("intro"))return "AM Intro";if(s.includes("upsell"))return "Upsell";
+        if(s.includes("rms set"))return "RMS Set Up";if(s.includes("rms"))return "RMS Discussions";
+        if(s.includes("follow")||s.includes("f/u"))return "Follow-up";return "Account Management";
       })();
       events.push({dateStr,summary,format,typeGuess});
     });
     return events;
   }
   function importICS(e) {
-    const file=e.target.files[0]; if(!file) return;
+    const file=e.target.files[0];if(!file)return;
     const reader=new FileReader();
     reader.onload=evt=>{
       const events=parseICS(evt.target.result).filter(ev=>ev.dateStr===selectedDate);
@@ -307,7 +306,7 @@ function App() {
       setMeetings(prev=>[...prev,...newM]);
       alert(`${newM.length} meeting${newM.length!==1?"s":""} imported.`);
     };
-    reader.readAsText(file); e.target.value="";
+    reader.readAsText(file);e.target.value="";
   }
   function exportCSV() {
     const esc=v=>`"${(v||"").replace(/"/g,'""')}"`;
@@ -324,38 +323,37 @@ function App() {
     Object.assign(document.createElement("a"),{href:URL.createObjectURL(new Blob([JSON.stringify({meetings,calls,upsells},null,2)],{type:"application/json"})),download:`tracker-backup-${TODAY}.json`}).click();
   }
   function restoreData(e) {
-    const file=e.target.files[0]; if(!file) return;
+    const file=e.target.files[0];if(!file)return;
     const r=new FileReader();
-    r.onload=evt=>{ try{ const d=JSON.parse(evt.target.result);
+    r.onload=evt=>{try{const d=JSON.parse(evt.target.result);
       if(d.meetings&&d.calls){setMeetings(d.meetings);setCalls(d.calls);if(d.upsells)setUpsells(d.upsells);alert("Restored!");}
       else if(Array.isArray(d)){setMeetings(d);}
       else alert("Invalid backup file.");
-    }catch{alert("Could not read file.");} };
-    r.readAsText(file); e.target.value="";
+    }catch{alert("Could not read file.");}};
+    r.readAsText(file);e.target.value="";
   }
   function weeklyData() {
     const weeks={};
-    meetings.forEach(m=>{ const k=getWeekKey(m.date); if(!weeks[k]) weeks[k]={mtgs:[],calls:[],ups:[]}; weeks[k].mtgs.push(m); });
-    calls.forEach(c=>{ const k=getWeekKey(c.date); if(!weeks[k]) weeks[k]={mtgs:[],calls:[],ups:[]}; weeks[k].calls.push(c); });
-    upsells.forEach(u=>{ const k=getWeekKey(u.date); if(!weeks[k]) weeks[k]={mtgs:[],calls:[],ups:[]}; weeks[k].ups.push(u); });
+    meetings.forEach(m=>{const k=getWeekKey(m.date);if(!weeks[k])weeks[k]={mtgs:[],calls:[],ups:[]};weeks[k].mtgs.push(m);});
+    calls.forEach(c=>{const k=getWeekKey(c.date);if(!weeks[k])weeks[k]={mtgs:[],calls:[],ups:[]};weeks[k].calls.push(c);});
+    upsells.forEach(u=>{const k=getWeekKey(u.date);if(!weeks[k])weeks[k]={mtgs:[],calls:[],ups:[]};weeks[k].ups.push(u);});
     return Object.entries(weeks).sort((a,b)=>b[0].localeCompare(a[0])).map(([wk,{mtgs,calls:wc,ups}])=>{
-      const end=new Date(wk+"T00:00:00"); end.setDate(end.getDate()+6);
-      return { wk, mtgs, calls:wc, ups, ms:calcMtgStats(mtgs), cs:calcCallStats(wc), standaloneUpsellPts:ups.length, wkEnd:end.toISOString().split("T")[0] };
+      const end=new Date(wk+"T00:00:00");end.setDate(end.getDate()+6);
+      return{wk,mtgs,calls:wc,ups,ms:calcMtgStats(mtgs),cs:calcCallStats(wc),standaloneUpsellPts:ups.length,wkEnd:end.toISOString().split("T")[0]};
     });
   }
 
-  const inp = { width:"100%", padding:"7px 10px", border:"0.5px solid var(--border-strong)", borderRadius:"var(--radius-md)", fontSize:14, background:"var(--bg-primary)", color:"var(--text-primary)" };
-  const btn = (extra={}) => ({ padding:"7px 14px", borderRadius:"var(--radius-md)", border:"0.5px solid var(--border-strong)", background:"var(--bg-primary)", color:"var(--text-primary)", fontSize:13, cursor:"pointer", ...extra });
-  const lbl = { fontSize:12, color:"var(--text-secondary)", marginBottom:3, display:"block" };
-
-  const Stat = ({label,value,color}) => (
-    <div style={{ background:"var(--bg-secondary)", borderRadius:"var(--radius-md)", padding:"10px 12px", flex:1, minWidth:70 }}>
-      <div style={{ fontSize:11, color:"var(--text-secondary)", marginBottom:2 }}>{label}</div>
-      <div style={{ fontSize:18, fontWeight:500, color:color||"var(--text-primary)" }}>{value}</div>
+  const inp={width:"100%",padding:"7px 10px",border:"0.5px solid var(--border-strong)",borderRadius:"var(--radius-md)",fontSize:14,background:"var(--bg-primary)",color:"var(--text-primary)"};
+  const btn=(extra={})=>({padding:"7px 14px",borderRadius:"var(--radius-md)",border:"0.5px solid var(--border-strong)",background:"var(--bg-primary)",color:"var(--text-primary)",fontSize:13,cursor:"pointer",...extra});
+  const lbl={fontSize:12,color:"var(--text-secondary)",marginBottom:3,display:"block"};
+  const Stat=({label,value,color})=>(
+    <div style={{background:"var(--bg-secondary)",borderRadius:"var(--radius-md)",padding:"10px 12px",flex:1,minWidth:70}}>
+      <div style={{fontSize:11,color:"var(--text-secondary)",marginBottom:2}}>{label}</div>
+      <div style={{fontSize:18,fontWeight:500,color:color||"var(--text-primary)"}}>{value}</div>
     </div>
   );
-  const Badge = ({label,colors}) => (
-    <span style={{ fontSize:11, padding:"2px 8px", borderRadius:20, background:colors?.bg||"#eee", color:colors?.text||"#555", whiteSpace:"nowrap" }}>{label}</span>
+  const Badge=({label,colors})=>(
+    <span style={{fontSize:11,padding:"2px 8px",borderRadius:20,background:colors?.bg||"#eee",color:colors?.text||"#555",whiteSpace:"nowrap"}}>{label}</span>
   );
 
   const ms=calcMtgStats(dayMtgs);
@@ -363,54 +361,53 @@ function App() {
   const totalDayPts=ms.points+cs.points+dayUpsells.length;
 
   return (
-    <div style={{ maxWidth:760, margin:"0 auto" }}>
-      <div style={{ background:"var(--bg-primary)", borderRadius:"var(--radius-lg)", border:"0.5px solid var(--border)", padding:"1.25rem", marginBottom:12 }}>
-        <h1 style={{ fontSize:18, fontWeight:500, marginBottom:4 }}>Meeting & Call Tracker</h1>
-        <p style={{ fontSize:13, color:"var(--text-secondary)" }}>Log meetings, calls and deals — track outcomes and weekly performance.</p>
+    <div style={{maxWidth:760,margin:"0 auto"}}>
+      <div style={{background:"var(--bg-primary)",borderRadius:"var(--radius-lg)",border:"0.5px solid var(--border)",padding:"1.25rem",marginBottom:12}}>
+        <h1 style={{fontSize:18,fontWeight:500,marginBottom:4}}>Meeting & Call Tracker</h1>
+        <p style={{fontSize:13,color:"var(--text-secondary)"}}>Log meetings, calls and deals — track outcomes and weekly performance.</p>
       </div>
-
-      <div style={{ background:"var(--bg-primary)", borderRadius:"var(--radius-lg)", border:"0.5px solid var(--border)", padding:"1.25rem" }}>
-        <div style={{ display:"flex", gap:8, marginBottom:20, flexWrap:"wrap" }}>
+      <div style={{background:"var(--bg-primary)",borderRadius:"var(--radius-lg)",border:"0.5px solid var(--border)",padding:"1.25rem"}}>
+        <div style={{display:"flex",gap:8,marginBottom:20,flexWrap:"wrap"}}>
           {["daily","weekly"].map(t=>(
-            <button key={t} onClick={()=>setTab(t)} style={btn({ background:tab===t?"var(--info-bg)":"var(--bg-primary)", color:tab===t?"var(--info-text)":"var(--text-primary)", border:tab===t?"0.5px solid var(--info-border)":"0.5px solid var(--border-strong)", fontWeight:tab===t?500:400 })}>
+            <button key={t} onClick={()=>setTab(t)} style={btn({background:tab===t?"var(--info-bg)":"var(--bg-primary)",color:tab===t?"var(--info-text)":"var(--text-primary)",border:tab===t?"0.5px solid var(--info-border)":"0.5px solid var(--border-strong)",fontWeight:tab===t?500:400})}>
               {t==="daily"?"Daily log":"Weekly summary"}
             </button>
           ))}
-          <div style={{ display:"flex", gap:6, marginLeft:"auto", flexWrap:"wrap" }}>
+          <div style={{display:"flex",gap:6,marginLeft:"auto",flexWrap:"wrap"}}>
             <label style={{...btn({color:"var(--info-text)",border:"0.5px solid var(--info-border)",cursor:"pointer"}),display:"inline-block"}}>
-              ↑ Import Calendar<input type="file" accept=".ics" onChange={importICS} style={{display:"none"}} />
+              ↑ Import Calendar<input type="file" accept=".ics" onChange={importICS} style={{display:"none"}}/>
             </label>
             <button onClick={exportCSV} style={btn({color:"var(--success-text)",border:"0.5px solid var(--success-border)"})}>↓ CSV</button>
             <button onClick={backupData} style={btn({color:"var(--info-text)",border:"0.5px solid var(--info-border)"})}>↓ Backup</button>
             <label style={{...btn({color:"var(--warn-text)",border:"0.5px solid var(--warn-border)",cursor:"pointer"}),display:"inline-block"}}>
-              ↑ Restore<input type="file" accept=".json" onChange={restoreData} style={{display:"none"}} />
+              ↑ Restore<input type="file" accept=".json" onChange={restoreData} style={{display:"none"}}/>
             </label>
           </div>
         </div>
 
-        {tab==="daily" && (
+        {tab==="daily"&&(
           <>
-            <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:16, flexWrap:"wrap" }}>
-              <input type="date" value={selectedDate} onChange={e=>setSelectedDate(e.target.value)} style={{...inp,width:"auto"}} />
-              <span style={{ fontSize:14, color:"var(--text-secondary)" }}>{formatDate(selectedDate)}</span>
-              <div style={{ marginLeft:"auto", display:"flex", gap:8, flexWrap:"wrap" }}>
-                <button onClick={()=>{ setMtgForm(EMPTY_MTG); setEditMtgId(null); setShowMtgForm(s=>!s); setShowCallForm(false); setShowUpsellForm(false); }} style={btn()}>
+            <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+              <input type="date" value={selectedDate} onChange={e=>setSelectedDate(e.target.value)} style={{...inp,width:"auto"}}/>
+              <span style={{fontSize:14,color:"var(--text-secondary)"}}>{formatDate(selectedDate)}</span>
+              <div style={{marginLeft:"auto",display:"flex",gap:8,flexWrap:"wrap"}}>
+                <button onClick={()=>{setMtgForm(EMPTY_MTG);setEditMtgId(null);setShowMtgForm(s=>!s);setShowCallForm(false);setShowUpsellForm(false);}} style={btn()}>
                   {showMtgForm?"Cancel":"+ Add meeting"}
                 </button>
-                <button onClick={()=>{ setCallForm(EMPTY_CALL); setEditCallId(null); setShowCallForm(s=>!s); setShowMtgForm(false); setShowUpsellForm(false); }} style={btn({background:"var(--bg-secondary)"})}>
+                <button onClick={()=>{setCallForm(EMPTY_CALL);setEditCallId(null);setShowCallForm(s=>!s);setShowMtgForm(false);setShowUpsellForm(false);}} style={btn({background:"var(--bg-secondary)"})}>
                   {showCallForm?"Cancel":"+ Log call"}
                 </button>
-                <button onClick={()=>{ setUpsellForm(EMPTY_UPSELL); setEditUpsellId(null); setShowUpsellForm(s=>!s); setShowMtgForm(false); setShowCallForm(false); }} style={btn({color:"var(--warn-text)",border:"0.5px solid var(--warn-border)"})}>
+                <button onClick={()=>{setUpsellForm(EMPTY_UPSELL);setEditUpsellId(null);setShowUpsellForm(s=>!s);setShowMtgForm(false);setShowCallForm(false);}} style={btn({color:"var(--warn-text)",border:"0.5px solid var(--warn-border)"})}>
                   {showUpsellForm?"Cancel":"+ Add deal"}
                 </button>
               </div>
             </div>
 
-            {showMtgForm && (
-              <div style={{ background:"var(--bg-secondary)", borderRadius:"var(--radius-lg)", padding:"1rem", marginBottom:16, border:"0.5px solid var(--border)" }}>
-                <div style={{ fontWeight:500, fontSize:13, marginBottom:10, color:"var(--text-secondary)" }}>MEETING</div>
-                <div style={{ marginBottom:10 }}><span style={lbl}>Contact / company *</span><input value={mtgForm.contact} onChange={e=>setMtgForm(f=>({...f,contact:e.target.value}))} placeholder="Name or company" style={inp} /></div>
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:10, marginBottom:10 }}>
+            {showMtgForm&&(
+              <div style={{background:"var(--bg-secondary)",borderRadius:"var(--radius-lg)",padding:"1rem",marginBottom:16,border:"0.5px solid var(--border)"}}>
+                <div style={{fontWeight:500,fontSize:13,marginBottom:10,color:"var(--text-secondary)"}}>MEETING</div>
+                <div style={{marginBottom:10}}><span style={lbl}>Contact / company *</span><input value={mtgForm.contact} onChange={e=>setMtgForm(f=>({...f,contact:e.target.value}))} placeholder="Name or company" style={inp}/></div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:10,marginBottom:10}}>
                   {[["Meeting type","type",MEETING_TYPES],["Format","format",MEETING_FORMATS],["Status *","status",STATUSES]].map(([label,key,opts])=>(
                     <div key={key}><span style={lbl}>{label}</span>
                       <select value={mtgForm[key]} onChange={e=>setMtgForm(f=>({...f,[key]:e.target.value}))} style={inp}>
@@ -420,10 +417,10 @@ function App() {
                     </div>
                   ))}
                 </div>
-                <div style={{ marginBottom:10 }}><span style={lbl}>Outcome / notes</span><input value={mtgForm.outcome} onChange={e=>setMtgForm(f=>({...f,outcome:e.target.value}))} placeholder="Brief notes..." style={inp} /></div>
-                <div style={{ marginBottom:12, display:"flex", alignItems:"center", gap:12 }}>
-                  <label style={{ display:"flex", alignItems:"center", gap:8, cursor:"pointer", fontSize:14 }}>
-                    <input type="checkbox" checked={mtgForm.upsell} onChange={e=>setMtgForm(f=>({...f,upsell:e.target.checked,upsellType:""}))} style={{width:16,height:16}} />
+                <div style={{marginBottom:10}}><span style={lbl}>Outcome / notes</span><input value={mtgForm.outcome} onChange={e=>setMtgForm(f=>({...f,outcome:e.target.value}))} placeholder="Brief notes..." style={inp}/></div>
+                <div style={{marginBottom:12,display:"flex",alignItems:"center",gap:12}}>
+                  <label style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer",fontSize:14}}>
+                    <input type="checkbox" checked={mtgForm.upsell} onChange={e=>setMtgForm(f=>({...f,upsell:e.target.checked,upsellType:""}))} style={{width:16,height:16}}/>
                     Successful upsell?
                   </label>
                   {mtgForm.upsell&&(
@@ -439,11 +436,11 @@ function App() {
               </div>
             )}
 
-            {showCallForm && (
-              <div style={{ background:"var(--bg-secondary)", borderRadius:"var(--radius-lg)", padding:"1rem", marginBottom:16, border:"0.5px solid var(--border)" }}>
-                <div style={{ fontWeight:500, fontSize:13, marginBottom:10, color:"var(--text-secondary)" }}>CALL</div>
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
-                  <div><span style={lbl}>Contact / company *</span><input value={callForm.contact} onChange={e=>setCallForm(f=>({...f,contact:e.target.value}))} placeholder="Name or company" style={inp} /></div>
+            {showCallForm&&(
+              <div style={{background:"var(--bg-secondary)",borderRadius:"var(--radius-lg)",padding:"1rem",marginBottom:16,border:"0.5px solid var(--border)"}}>
+                <div style={{fontWeight:500,fontSize:13,marginBottom:10,color:"var(--text-secondary)"}}>CALL</div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+                  <div><span style={lbl}>Contact / company *</span><input value={callForm.contact} onChange={e=>setCallForm(f=>({...f,contact:e.target.value}))} placeholder="Name or company" style={inp}/></div>
                   <div><span style={lbl}>Status *</span>
                     <select value={callForm.status} onChange={e=>setCallForm(f=>({...f,status:e.target.value}))} style={inp}>
                       <option value="">Select...</option>
@@ -451,18 +448,18 @@ function App() {
                     </select>
                   </div>
                 </div>
-                <div style={{ marginBottom:12 }}><span style={lbl}>Notes</span><input value={callForm.notes} onChange={e=>setCallForm(f=>({...f,notes:e.target.value}))} placeholder="Optional notes..." style={inp} /></div>
+                <div style={{marginBottom:12}}><span style={lbl}>Notes</span><input value={callForm.notes} onChange={e=>setCallForm(f=>({...f,notes:e.target.value}))} placeholder="Optional notes..." style={inp}/></div>
                 <button onClick={saveCall} style={btn({background:"var(--success-bg)",color:"var(--success-text)",border:"0.5px solid var(--success-border)"})}>
                   {editCallId?"Update call":"Save call"}
                 </button>
               </div>
             )}
 
-            {showUpsellForm && (
-              <div style={{ background:"var(--bg-secondary)", borderRadius:"var(--radius-lg)", padding:"1rem", marginBottom:16, border:"0.5px solid var(--warn-border)" }}>
-                <div style={{ fontWeight:500, fontSize:13, marginBottom:10, color:"var(--warn-text)" }}>STANDALONE DEAL</div>
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
-                  <div><span style={lbl}>Contact / company *</span><input value={upsellForm.contact} onChange={e=>setUpsellForm(f=>({...f,contact:e.target.value}))} placeholder="Name or company" style={inp} /></div>
+            {showUpsellForm&&(
+              <div style={{background:"var(--bg-secondary)",borderRadius:"var(--radius-lg)",padding:"1rem",marginBottom:16,border:"0.5px solid var(--warn-border)"}}>
+                <div style={{fontWeight:500,fontSize:13,marginBottom:10,color:"var(--warn-text)"}}>STANDALONE DEAL</div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+                  <div><span style={lbl}>Contact / company *</span><input value={upsellForm.contact} onChange={e=>setUpsellForm(f=>({...f,contact:e.target.value}))} placeholder="Name or company" style={inp}/></div>
                   <div><span style={lbl}>Deal type *</span>
                     <select value={upsellForm.upsellType} onChange={e=>setUpsellForm(f=>({...f,upsellType:e.target.value}))} style={inp}>
                       <option value="">Select...</option>
@@ -470,69 +467,69 @@ function App() {
                     </select>
                   </div>
                 </div>
-                <div style={{ marginBottom:12 }}><span style={lbl}>Notes</span><input value={upsellForm.notes} onChange={e=>setUpsellForm(f=>({...f,notes:e.target.value}))} placeholder="Optional notes..." style={inp} /></div>
+                <div style={{marginBottom:12}}><span style={lbl}>Notes</span><input value={upsellForm.notes} onChange={e=>setUpsellForm(f=>({...f,notes:e.target.value}))} placeholder="Optional notes..." style={inp}/></div>
                 <button onClick={saveUpsell} style={btn({background:"var(--warn-bg)",color:"var(--warn-text)",border:"0.5px solid var(--warn-border)"})}>
                   {editUpsellId?"Update deal":"Save deal"}
                 </button>
               </div>
             )}
 
-            {(dayMtgs.length>0||dayCalls.length>0||dayUpsells.length>0) ? (
+            {(dayMtgs.length>0||dayCalls.length>0||dayUpsells.length>0)?(
               <>
-                <div style={{ background:"var(--info-bg)", borderRadius:10, padding:"10px 14px", marginBottom:16, display:"flex", flexWrap:"wrap", gap:16, alignItems:"center" }}>
-                  <div style={{ fontSize:13 }}>
-                    <span style={{ color:"var(--text-secondary)" }}>Meetings: </span>
-                    <span style={{ fontWeight:500 }}>{ms.totalComp}/{ms.total}</span>
-                    <span style={{ color:"var(--text-secondary)", marginLeft:6 }}>show rate</span>
-                    <span style={{ fontWeight:500, marginLeft:4 }}>{ms.showRateTotal}</span>
-                    <span style={{ color:"var(--info-text)", marginLeft:8, fontWeight:500 }}>{ms.points} pts</span>
+                <div style={{background:"var(--info-bg)",borderRadius:10,padding:"10px 14px",marginBottom:16,display:"flex",flexWrap:"wrap",gap:16,alignItems:"center"}}>
+                  <div style={{fontSize:13}}>
+                    <span style={{color:"var(--text-secondary)"}}>Meetings: </span>
+                    <span style={{fontWeight:500}}>{ms.totalComp}/{ms.total}</span>
+                    <span style={{color:"var(--text-secondary)",marginLeft:6}}>show rate</span>
+                    <span style={{fontWeight:500,marginLeft:4}}>{ms.showRateTotal}</span>
+                    <span style={{color:"var(--info-text)",marginLeft:8,fontWeight:500}}>{ms.points} pts</span>
                   </div>
-                  <div style={{ fontSize:13 }}>
-                    <span style={{ color:"var(--text-secondary)" }}>Calls: </span>
-                    <span style={{ fontWeight:500 }}>{cs.connected}/{cs.total}</span>
-                    <span style={{ color:"var(--text-secondary)", marginLeft:6 }}>connected</span>
-                    <span style={{ color:"var(--info-text)", marginLeft:8, fontWeight:500 }}>{cs.points} pts</span>
+                  <div style={{fontSize:13}}>
+                    <span style={{color:"var(--text-secondary)"}}>Calls: </span>
+                    <span style={{fontWeight:500}}>{cs.connected}/{cs.total}</span>
+                    <span style={{color:"var(--text-secondary)",marginLeft:6}}>connected</span>
+                    <span style={{color:"var(--info-text)",marginLeft:8,fontWeight:500}}>{cs.points} pts</span>
                   </div>
                   {dayUpsells.length>0&&(
-                    <div style={{ fontSize:13 }}>
-                      <span style={{ color:"var(--text-secondary)" }}>Deals: </span>
-                      <span style={{ fontWeight:500 }}>{dayUpsells.length}</span>
-                      <span style={{ color:"var(--info-text)", marginLeft:8, fontWeight:500 }}>{dayUpsells.length} pts</span>
+                    <div style={{fontSize:13}}>
+                      <span style={{color:"var(--text-secondary)"}}>Deals: </span>
+                      <span style={{fontWeight:500}}>{dayUpsells.length}</span>
+                      <span style={{color:"var(--info-text)",marginLeft:8,fontWeight:500}}>{dayUpsells.length} pts</span>
                     </div>
                   )}
-                  <div style={{ marginLeft:"auto", textAlign:"right" }}>
-                    <div style={{ fontSize:18, fontWeight:600, color:"var(--info-text)" }}>{totalDayPts} pts today</div>
-                    <div style={{ fontSize:11, color:"var(--text-secondary)" }}>{ms.points} mtg + {cs.points} calls + {dayUpsells.length} deals</div>
+                  <div style={{marginLeft:"auto",textAlign:"right"}}>
+                    <div style={{fontSize:18,fontWeight:600,color:"var(--info-text)"}}>{totalDayPts} pts today</div>
+                    <div style={{fontSize:11,color:"var(--text-secondary)"}}>{ms.points} mtg + {cs.points} calls + {dayUpsells.length} deals</div>
                   </div>
                 </div>
 
                 {dayMtgs.length>0&&(
                   <>
                     <span style={secLabel}>Meetings</span>
-                    <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:10 }}>
-                      <Stat label="Total booked" value={ms.total} />
-                      <Stat label="Show rate" value={ms.showRateTotal} color="var(--info-text)" />
-                      <Stat label="Online ✓" value={ms.compOnline} color="var(--success-text)" />
-                      <Stat label="In person ✓" value={ms.compInPerson} color="var(--success-text)" />
-                      <Stat label="No show" value={ms.ns} color="var(--danger-text)" />
-                      <Stat label="Cancelled" value={ms.canc} color="var(--danger-text)" />
-                      <Stat label="Rescheduled" value={ms.resch} color="var(--warn-text)" />
-                      <Stat label="Upsells" value={ms.upsells} color="var(--warn-text)" />
-                      <Stat label="Mtg pts" value={ms.points} color="var(--info-text)" />
+                    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+                      <Stat label="Total booked" value={ms.total}/>
+                      <Stat label="Show rate" value={ms.showRateTotal} color="var(--info-text)"/>
+                      <Stat label="Online ✓" value={ms.compOnline} color="var(--success-text)"/>
+                      <Stat label="In person ✓" value={ms.compInPerson} color="var(--success-text)"/>
+                      <Stat label="No show" value={ms.ns} color="var(--danger-text)"/>
+                      <Stat label="Cancelled" value={ms.canc} color="var(--danger-text)"/>
+                      <Stat label="Rescheduled" value={ms.resch} color="var(--warn-text)"/>
+                      <Stat label="Upsells" value={ms.upsells} color="var(--warn-text)"/>
+                      <Stat label="Mtg pts" value={ms.points} color="var(--info-text)"/>
                     </div>
-                    <div style={{ display:"flex", flexDirection:"column", gap:6, marginBottom:16 }}>
+                    <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:16}}>
                       {dayMtgs.map(m=>(
-                        <div key={m.id} style={{ background:"var(--bg-primary)", border:"0.5px solid var(--border)", borderRadius:10, padding:"9px 12px" }}>
-                          <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
-                            <span style={{ fontWeight:500, fontSize:14, flex:1 }}>{m.contact}</span>
-                            <span style={{ fontSize:11, padding:"2px 8px", borderRadius:20, background:"var(--bg-secondary)", color:"var(--text-secondary)" }}>{m.type}</span>
-                            <span style={{ fontSize:11, padding:"2px 8px", borderRadius:20, background:"var(--bg-secondary)", color:"var(--text-secondary)" }}>{m.format}</span>
-                            <Badge label={m.status} colors={STATUS_COLORS[m.status]} />
-                            <button onClick={()=>startEditMtg(m)} style={{ fontSize:12, padding:"3px 8px", borderRadius:6, border:"0.5px solid var(--border-strong)", background:"transparent", cursor:"pointer", color:"var(--text-secondary)" }}>Edit</button>
-                            <button onClick={()=>setMeetings(p=>p.filter(x=>x.id!==m.id))} style={{ fontSize:12, padding:"3px 8px", borderRadius:6, border:"0.5px solid var(--danger-border)", background:"transparent", cursor:"pointer", color:"var(--danger-text)" }}>✕</button>
+                        <div key={m.id} style={{background:"var(--bg-primary)",border:"0.5px solid var(--border)",borderRadius:10,padding:"9px 12px"}}>
+                          <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+                            <span style={{fontWeight:500,fontSize:14,flex:1}}>{m.contact}</span>
+                            <span style={{fontSize:11,padding:"2px 8px",borderRadius:20,background:"var(--bg-secondary)",color:"var(--text-secondary)"}}>{m.type}</span>
+                            <span style={{fontSize:11,padding:"2px 8px",borderRadius:20,background:"var(--bg-secondary)",color:"var(--text-secondary)"}}>{m.format}</span>
+                            <Badge label={m.status} colors={STATUS_COLORS[m.status]}/>
+                            <button onClick={()=>startEditMtg(m)} style={{fontSize:12,padding:"3px 8px",borderRadius:6,border:"0.5px solid var(--border-strong)",background:"transparent",cursor:"pointer",color:"var(--text-secondary)"}}>Edit</button>
+                            <button onClick={()=>setMeetings(p=>p.filter(x=>x.id!==m.id))} style={{fontSize:12,padding:"3px 8px",borderRadius:6,border:"0.5px solid var(--danger-border)",background:"transparent",cursor:"pointer",color:"var(--danger-text)"}}>✕</button>
                           </div>
-                          {m.outcome&&<div style={{ fontSize:12, color:"var(--text-secondary)", marginTop:4 }}>{m.outcome}</div>}
-                          {m.upsell&&m.upsellType&&<div style={{ marginTop:4 }}><span style={{ fontSize:11, padding:"2px 8px", borderRadius:20, background:"var(--warn-bg)", color:"var(--warn-text)", fontWeight:500 }}>Upsell: {m.upsellType}</span></div>}
+                          {m.outcome&&<div style={{fontSize:12,color:"var(--text-secondary)",marginTop:4}}>{m.outcome}</div>}
+                          {m.upsell&&m.upsellType&&<div style={{marginTop:4}}><span style={{fontSize:11,padding:"2px 8px",borderRadius:20,background:"var(--warn-bg)",color:"var(--warn-text)",fontWeight:500}}>Upsell: {m.upsellType}</span></div>}
                         </div>
                       ))}
                     </div>
@@ -542,26 +539,26 @@ function App() {
                 {dayCalls.length>0&&(
                   <>
                     <span style={secLabel}>Calls</span>
-                    <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:10 }}>
-                      <Stat label="Total calls" value={cs.total} />
-                      <Stat label="Connected" value={cs.connected} color="var(--success-text)" />
-                      <Stat label="Not connected" value={cs.notConnected} color="var(--danger-text)" />
-                      <Stat label="Quality calls" value={cs.quality} color="var(--success-text)" />
-                      <Stat label="Mtg booked" value={cs.booked} color="var(--warn-text)" />
-                      <Stat label="Connect %" value={cs.connectRate} color="var(--info-text)" />
-                      <Stat label="Call pts" value={cs.points} color="var(--info-text)" />
+                    <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+                      <Stat label="Total calls" value={cs.total}/>
+                      <Stat label="Connected" value={cs.connected} color="var(--success-text)"/>
+                      <Stat label="Not connected" value={cs.notConnected} color="var(--danger-text)"/>
+                      <Stat label="Quality calls" value={cs.quality} color="var(--success-text)"/>
+                      <Stat label="Mtg booked" value={cs.booked} color="var(--warn-text)"/>
+                      <Stat label="Connect %" value={cs.connectRate} color="var(--info-text)"/>
+                      <Stat label="Call pts" value={cs.points} color="var(--info-text)"/>
                     </div>
-                    <div style={{ display:"flex", flexDirection:"column", gap:6, marginBottom:16 }}>
+                    <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:16}}>
                       {dayCalls.map(c=>(
-                        <div key={c.id} style={{ background:"var(--bg-primary)", border:"0.5px solid var(--border)", borderRadius:10, padding:"9px 12px" }}>
-                          <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
-                            <span style={{ fontWeight:500, fontSize:14, flex:1 }}>{c.contact}</span>
-                            <Badge label={c.status} colors={CALL_COLORS[c.status]} />
-                            {CALL_POINTS[c.status]&&<span style={{ fontSize:11, padding:"2px 8px", borderRadius:20, background:"var(--info-bg)", color:"var(--info-text)", fontWeight:500 }}>+{CALL_POINTS[c.status]} pt</span>}
-                            <button onClick={()=>startEditCall(c)} style={{ fontSize:12, padding:"3px 8px", borderRadius:6, border:"0.5px solid var(--border-strong)", background:"transparent", cursor:"pointer", color:"var(--text-secondary)" }}>Edit</button>
-                            <button onClick={()=>setCalls(p=>p.filter(x=>x.id!==c.id))} style={{ fontSize:12, padding:"3px 8px", borderRadius:6, border:"0.5px solid var(--danger-border)", background:"transparent", cursor:"pointer", color:"var(--danger-text)" }}>✕</button>
+                        <div key={c.id} style={{background:"var(--bg-primary)",border:"0.5px solid var(--border)",borderRadius:10,padding:"9px 12px"}}>
+                          <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+                            <span style={{fontWeight:500,fontSize:14,flex:1}}>{c.contact}</span>
+                            <Badge label={c.status} colors={CALL_COLORS[c.status]}/>
+                            {CALL_POINTS[c.status]&&<span style={{fontSize:11,padding:"2px 8px",borderRadius:20,background:"var(--info-bg)",color:"var(--info-text)",fontWeight:500}}>+{CALL_POINTS[c.status]} pt</span>}
+                            <button onClick={()=>startEditCall(c)} style={{fontSize:12,padding:"3px 8px",borderRadius:6,border:"0.5px solid var(--border-strong)",background:"transparent",cursor:"pointer",color:"var(--text-secondary)"}}>Edit</button>
+                            <button onClick={()=>setCalls(p=>p.filter(x=>x.id!==c.id))} style={{fontSize:12,padding:"3px 8px",borderRadius:6,border:"0.5px solid var(--danger-border)",background:"transparent",cursor:"pointer",color:"var(--danger-text)"}}>✕</button>
                           </div>
-                          {c.notes&&<div style={{ fontSize:12, color:"var(--text-secondary)", marginTop:4 }}>{c.notes}</div>}
+                          {c.notes&&<div style={{fontSize:12,color:"var(--text-secondary)",marginTop:4}}>{c.notes}</div>}
                         </div>
                       ))}
                     </div>
@@ -571,40 +568,40 @@ function App() {
                 {dayUpsells.length>0&&(
                   <>
                     <span style={secLabel}>Standalone deals</span>
-                    <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
+                    <div style={{display:"flex",flexDirection:"column",gap:6}}>
                       {dayUpsells.map(u=>(
-                        <div key={u.id} style={{ background:"var(--bg-primary)", border:"0.5px solid var(--warn-border)", borderRadius:10, padding:"9px 12px" }}>
-                          <div style={{ display:"flex", alignItems:"center", gap:8, flexWrap:"wrap" }}>
-                            <span style={{ fontWeight:500, fontSize:14, flex:1 }}>{u.contact}</span>
-                            <span style={{ fontSize:11, padding:"2px 8px", borderRadius:20, background:"var(--warn-bg)", color:"var(--warn-text)", fontWeight:500 }}>{u.upsellType}</span>
-                            <span style={{ fontSize:11, padding:"2px 8px", borderRadius:20, background:"var(--info-bg)", color:"var(--info-text)", fontWeight:500 }}>+1 pt</span>
-                            <button onClick={()=>startEditUpsell(u)} style={{ fontSize:12, padding:"3px 8px", borderRadius:6, border:"0.5px solid var(--border-strong)", background:"transparent", cursor:"pointer", color:"var(--text-secondary)" }}>Edit</button>
-                            <button onClick={()=>setUpsells(p=>p.filter(x=>x.id!==u.id))} style={{ fontSize:12, padding:"3px 8px", borderRadius:6, border:"0.5px solid var(--danger-border)", background:"transparent", cursor:"pointer", color:"var(--danger-text)" }}>✕</button>
+                        <div key={u.id} style={{background:"var(--bg-primary)",border:"0.5px solid var(--warn-border)",borderRadius:10,padding:"9px 12px"}}>
+                          <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+                            <span style={{fontWeight:500,fontSize:14,flex:1}}>{u.contact}</span>
+                            <span style={{fontSize:11,padding:"2px 8px",borderRadius:20,background:"var(--warn-bg)",color:"var(--warn-text)",fontWeight:500}}>{u.upsellType}</span>
+                            <span style={{fontSize:11,padding:"2px 8px",borderRadius:20,background:"var(--info-bg)",color:"var(--info-text)",fontWeight:500}}>+1 pt</span>
+                            <button onClick={()=>startEditUpsell(u)} style={{fontSize:12,padding:"3px 8px",borderRadius:6,border:"0.5px solid var(--border-strong)",background:"transparent",cursor:"pointer",color:"var(--text-secondary)"}}>Edit</button>
+                            <button onClick={()=>setUpsells(p=>p.filter(x=>x.id!==u.id))} style={{fontSize:12,padding:"3px 8px",borderRadius:6,border:"0.5px solid var(--danger-border)",background:"transparent",cursor:"pointer",color:"var(--danger-text)"}}>✕</button>
                           </div>
-                          {u.notes&&<div style={{ fontSize:12, color:"var(--text-secondary)", marginTop:4 }}>{u.notes}</div>}
+                          {u.notes&&<div style={{fontSize:12,color:"var(--text-secondary)",marginTop:4}}>{u.notes}</div>}
                         </div>
                       ))}
                     </div>
                   </>
                 )}
               </>
-            ) : (
-              <div style={{ textAlign:"center", padding:"2rem 0", color:"var(--text-tertiary)", fontSize:14 }}>Nothing logged for this day yet.</div>
+            ):(
+              <div style={{textAlign:"center",padding:"2rem 0",color:"var(--text-tertiary)",fontSize:14}}>Nothing logged for this day yet.</div>
             )}
           </>
         )}
 
         {tab==="weekly"&&(
           weeklyData().length===0
-            ? <div style={{ textAlign:"center", padding:"2rem 0", color:"var(--text-tertiary)", fontSize:14 }}>No data logged yet.</div>
-            : <WeeklyView data={weeklyData()} />
+            ?<div style={{textAlign:"center",padding:"2rem 0",color:"var(--text-tertiary)",fontSize:14}}>No data logged yet.</div>
+            :<WeeklyView data={weeklyData()}/>
         )}
       </div>
     </div>
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
