@@ -400,9 +400,9 @@ function render(){
 }
 
 // Form updaters
-function updateMtgForm(k,v){state.mtgForm[k]=v;if(k==="upsell"&&!v)state.mtgForm.upsellType="";render();}
-function updateCallForm(k,v){state.callForm[k]=v;render();}
-function updateUpsellForm(k,v){state.upsellForm[k]=v;render();}
+function updateMtgForm(k,v){state.mtgForm[k]=v;if(k==="upsell"&&!v)state.mtgForm.upsellType="";if(k==="upsell")render();}
+function updateCallForm(k,v){state.callForm[k]=v;}
+function updateUpsellForm(k,v){state.upsellForm[k]=v;}
 function toggleForm(t){
   if(t==="mtg"){state.showMtgForm=!state.showMtgForm;state.showCallForm=false;state.showUpsellForm=false;if(!state.showMtgForm){state.editMtgId=null;state.mtgForm={contact:"",type:MEETING_TYPES[0],format:MEETING_FORMATS[0],status:"",outcome:"",upsell:false,upsellType:""};}}
   if(t==="call"){state.showCallForm=!state.showCallForm;state.showMtgForm=false;state.showUpsellForm=false;if(!state.showCallForm){state.editCallId=null;state.callForm={contact:"",status:"",notes:""};}}
