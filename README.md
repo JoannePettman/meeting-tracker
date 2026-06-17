@@ -414,7 +414,7 @@ function toggleWeek(wk){setState({expandedWeek:state.expandedWeek===wk?null:wk})
 // Save actions
 function saveMtg(){
   const f=state.mtgForm;if(!f.contact||!f.status)return;
-  if(state.editMtgId){state.meetings=state.meetings.map(m=>m.id===state.editMtgId?{...f,date:state.date,id:state.editMtgId}:m);state.editMtgId=null;}
+  if(state.editMtgId){state.meetings=state.meetings.map(m=>String(m.id)===String(state.editMtgId)?{...m,...f,date:state.date,id:m.id}:m);state.editMtgId=null;}
   else state.meetings.push({...f,date:state.date,id:Date.now()});
   state.mtgForm={contact:"",type:MEETING_TYPES[0],format:MEETING_FORMATS[0],status:"",outcome:"",upsell:false,upsellType:""};
   state.showMtgForm=false;setState({});
@@ -433,7 +433,7 @@ function saveUpsell(){
 }
 
 // Edit
-function editMtg(id){const m=state.meetings.find(m=>m.id==id);if(!m)return;state.mtgForm={contact:m.contact,type:m.type,format:m.format,status:m.status,outcome:m.outcome,upsell:m.upsell||false,upsellType:m.upsellType||""};state.editMtgId=id;state.showMtgForm=true;state.showCallForm=false;state.showUpsellForm=false;render();}
+function editMtg(id){const m=state.meetings.find(m=>String(m.id)===String(id));if(!m)return;state.mtgForm={contact:m.contact,type:m.type,format:m.format,status:m.status,outcome:m.outcome,upsell:m.upsell||false,upsellType:m.upsellType||""};state.editMtgId=String(id);state.showMtgForm=true;state.showCallForm=false;state.showUpsellForm=false;render();}
 function editCall(id){const c=state.calls.find(c=>c.id==id);if(!c)return;state.callForm={contact:c.contact,status:c.status,notes:c.notes};state.editCallId=id;state.showCallForm=true;state.showMtgForm=false;state.showUpsellForm=false;render();}
 function editUpsell(id){const u=state.upsells.find(u=>u.id==id);if(!u)return;state.upsellForm={contact:u.contact,upsellType:u.upsellType,notes:u.notes};state.editUpsellId=id;state.showUpsellForm=true;state.showMtgForm=false;state.showCallForm=false;render();}
 
